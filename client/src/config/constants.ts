@@ -10,6 +10,13 @@ interface FilterTabs {
   icon: string;
 }
 
+interface DecalTypes {
+  [key: string]: {
+    stateProperty: string;
+    filterTab: string;
+  };
+}
+
 export const EditorTabs: EditorTabs[] = [
   {
     name: 'colorpicker',
@@ -36,7 +43,7 @@ export const FilterTabs: FilterTabs[] = [
   },
 ];
 
-export const DecalTypes = {
+export const DecalTypes: DecalTypes = {
   logo: {
     stateProperty: 'logoDecal',
     filterTab: 'logoShirt',

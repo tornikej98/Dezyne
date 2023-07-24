@@ -14,12 +14,16 @@ import { fade } from 'maath/dist/declarations/src/misc';
 const CustomizerPage = () => {
   const snap = useSnapshot(state);
 
-  const [file, setFile] = useState('');
+  const [file, setFile] = useState<File | undefined>(undefined);
   const [AIPromt, setAIPromt] = useState('');
   const [generateImage, setGenerateImage] = useState(false);
 
   const [activeEditorTab, setActiveEditorTab] = useState('');
-  const [activeFilterTab, setActiveFilterTab] = useState({
+  const [activeFilterTab, setActiveFilterTab] = useState<{
+    logoShirt: boolean;
+    stylishShirt: boolean;
+    [key: string]: boolean | string;
+  }>({
     logoShirt: true,
     stylishShirt: false,
   });
@@ -28,10 +32,35 @@ const CustomizerPage = () => {
     if (activeEditorTab === 'colorpicker') {
       return <ColorPicker />;
     } else if (activeEditorTab === 'filepicker') {
-      return <FilePicker />;
+      return <FilePicker file={file!} setFile={setFile} readFile={readFile} />;
     } else if (activeEditorTab === 'aipicker') {
       return <AIPicker />;
     } else return null;
+  };
+
+  const handleDecals = (type: string, result: string) => {
+    const decalType = DecalTypes[type];
+
+    state[decalType.stateProperty] = result;
+
+    if (!activeFilterTab[decalType.filterTab]) {
+      handleActiveFilterTab(decalType.filterTab);
+    }
+  };
+
+  const handleActiveFilterTab = (tabName: string) => {
+    if (tabName === 'logoShirt') {
+      return (state.isLogoTexture = !activeFilterTab[tabName]);
+    } else if (tabName === 'stylishShirt') {
+      return (state.isFullTexture = !activeFilterTab[tabName]);
+    } else return (state.isFullTexture = false), (state.isLogoTexture = true);
+  };
+
+  const readFile = (type: string) => {
+    reader(file!).then((result) => {
+      handleDecals(type, result as string);
+      setActiveEditorTab('');
+    });
   };
 
   return (
