@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { AnimatePresence, animatePresence, motion } from 'framer-motion';
 import { useSnapshot } from 'valtio';
 
@@ -13,6 +13,27 @@ import { fade } from 'maath/dist/declarations/src/misc';
 
 const CustomizerPage = () => {
   const snap = useSnapshot(state);
+
+  const [file, setFile] = useState('');
+  const [AIPromt, setAIPromt] = useState('');
+  const [generateImage, setGenerateImage] = useState(false);
+
+  const [activeEditorTab, setActiveEditorTab] = useState('');
+  const [activeFilterTab, setActiveFilterTab] = useState({
+    logoShirt: true,
+    stylishShirt: false,
+  });
+
+  const showTabContent = () => {
+    if (activeEditorTab === 'colorpicker') {
+      return <ColorPicker />;
+    } else if (activeEditorTab === 'filepicker') {
+      return <FilePicker />;
+    } else if (activeEditorTab === 'aipicker') {
+      return <AIPicker />;
+    } else return null;
+  };
+
   return (
     <AnimatePresence>
       {!snap.intro && (
@@ -25,8 +46,13 @@ const CustomizerPage = () => {
             <div className='flex items-center min-h-screen'>
               <div className='editortabs-container tabs'>
                 {EditorTabs.map((tab) => (
-                  <TabPicker key={tab.name} tab={tab} handleClick={() => {}} />
+                  <TabPicker
+                    key={tab.name}
+                    tab={tab}
+                    handleClick={() => setActiveEditorTab(tab.name)}
+                  />
                 ))}
+                {showTabContent()}
               </div>
             </div>
           </motion.div>
