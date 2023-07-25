@@ -9,7 +9,7 @@ interface TabPicker {
     icon: string;
   };
   isFilterTab?: boolean;
-  isActiveTab?: string;
+  isActiveTab?: boolean;
   handleClick: () => void;
 }
 

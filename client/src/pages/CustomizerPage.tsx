@@ -49,11 +49,24 @@ const CustomizerPage = () => {
   };
 
   const handleActiveFilterTab = (tabName: string) => {
-    if (tabName === 'logoShirt') {
-      return (state.isLogoTexture = !activeFilterTab[tabName]);
-    } else if (tabName === 'stylishShirt') {
-      return (state.isFullTexture = !activeFilterTab[tabName]);
-    } else return (state.isFullTexture = false), (state.isLogoTexture = true);
+    switch (tabName) {
+      case 'logoShirt':
+        state.isLogoTexture = !activeFilterTab[tabName];
+        break;
+      case 'stylishShirt':
+        state.isFullTexture = !activeFilterTab[tabName];
+        break;
+      default:
+        state.isLogoTexture = true;
+        state.isFullTexture = false;
+    }
+
+    setActiveFilterTab((prevState) => {
+      return {
+        ...prevState,
+        [tabName]: !prevState[tabName],
+      };
+    });
   };
 
   const readFile = (type: string) => {
@@ -106,8 +119,10 @@ const CustomizerPage = () => {
                 key={tab.name}
                 tab={tab}
                 isFilterTab
-                isActiveTab=''
-                handleClick={() => {}}
+                isActiveTab={activeFilterTab[tab.name] as boolean}
+                handleClick={() => {
+                  handleActiveFilterTab(tab.name);
+                }}
               />
             ))}
           </motion.div>
