@@ -11,27 +11,29 @@ const config = new Configuration({
 });
 
 const openai = new OpenAIApi(config);
-
-router.route('/').get((req, res) => {
-  res.status(200).json({ message: 'hello world' });
-});
-
+interface CreateImageRequest {
+  n: number;
+  size: '1024x1024';
+  response_format: 'b64_json';
+  AIPromt?: any;
+}
 router.route('/').post(async (req, res) => {
   try {
-    const { promt } = req.body;
-    const respone = await openai.createImage({
-      prompt: promt,
+    const { AIPromt } = req.body;
+
+    const response = await openai.createImage({
+      prompt: AIPromt,
       n: 1,
       size: '1024x1024',
       response_format: 'b64_json',
     });
 
-    const image = respone.data.data[0].b64_json;
+    const image = response.data.data[0].b64_json;
 
     res.status(200).json({ photo: image });
   } catch (error) {
-    console.log(error);
-    res.status(500);
+    console.error(error);
+    res.status(500).json();
   }
 });
 

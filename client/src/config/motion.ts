@@ -1,24 +1,29 @@
-export const transition = { type: "spring", duration: 0.8 };
+export const transition = { type: 'spring', duration: 0.8 };
 
-export const slideAnimation = (direction) => {
+export const slideAnimation = (direction: string) => {
+  const transition = {
+    damping: 25,
+    stiffness: 500,
+  };
+
+  const slideIn = {
+    x: 0,
+    y: 0,
+    opacity: 1,
+    transition: { ...transition, delay: 0 },
+  };
+
+  const slideOut = {
+    x: direction === 'left' ? -100 : direction === 'right' ? 100 : 0,
+    y: direction === 'up' ? -100 : direction === 'down' ? 100 : 0,
+    opacity: 0,
+    transition: { ...transition, delay: 0 },
+  };
+
   return {
-    initial: {
-      x: direction === "left" ? -100 : direction === "right" ? 100 : 0,
-      y: direction === "up" ? 100 : direction === "down" ? -100 : 0,
-      opacity: 0,
-      transition: { ...transition, delay: 0.5 },
-    },
-    animate: {
-      x: 0,
-      y: 0,
-      opacity: 1,
-      transition: { ...transition, delay: 0 },
-    },
-    exit: {
-      x: direction === "left" ? -100 : direction === "right" ? 100 : 0,
-      y: direction === "up" ? 100 : direction === "down" ? -100 : 0,
-      transition: { ...transition, delay: 0 },
-    },
+    initial: slideOut,
+    animate: slideIn,
+    exit: slideOut,
   };
 };
 
@@ -41,7 +46,7 @@ export const headTextAnimation = {
   initial: { x: 100, opacity: 0 },
   animate: { x: 0, opacity: 1 },
   transition: {
-    type: "spring",
+    type: 'spring',
     damping: 5,
     stiffness: 40,
     restDelta: 0.001,
@@ -53,7 +58,7 @@ export const headContentAnimation = {
   initial: { y: 100, opacity: 0 },
   animate: { y: 0, opacity: 1 },
   transition: {
-    type: "spring",
+    type: 'spring',
     damping: 7,
     stiffness: 30,
     restDelta: 0.001,

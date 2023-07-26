@@ -1,9 +1,20 @@
-import ai from "./ai.png";
-import fileIcon from "./file.png";
-import swatch from "./swatch.png";
-import download from "./download.png";
+import ai from './chatbot.png';
+import fileIcon from './folder.png';
+import swatch from './color-wheel.png';
+import download from './download.png';
+import dezyne from './Dezyne_logo.png';
+import tigerStripes from './tiger_stripes.png';
 
-import logoShirt from "./logo-tshirt.png";
-import stylishShirt from "./stylish-tshirt.png";
+import logoShirt from './tshirt-logo.png';
+import stylishShirt from './tshirt.png';
 
-export { ai, fileIcon, swatch, download, logoShirt, stylishShirt };
+export {
+  ai,
+  fileIcon,
+  swatch,
+  download,
+  logoShirt,
+  stylishShirt,
+  dezyne,
+  tigerStripes,
+};

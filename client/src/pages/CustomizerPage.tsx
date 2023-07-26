@@ -1,15 +1,13 @@
-import React, { useState } from 'react';
-import { AnimatePresence, animatePresence, motion } from 'framer-motion';
+import { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useSnapshot } from 'valtio';
 
-import config from '../config/config';
 import state from '../store';
-import { download } from '../assets';
-import { downloadCanvasToImage, reader } from '../config/helpers';
+
+import { reader } from '../config/helpers';
 import { EditorTabs, FilterTabs, DecalTypes } from '../config/constants';
 import { fadeAnimation, slideAnimation } from '../config/motion';
 import { AIPicker, ColorPicker, FilePicker, TabPicker } from '../components';
-import { fade } from 'maath/dist/declarations/src/misc';
 
 const CustomizerPage = () => {
   const snap = useSnapshot(state);
@@ -34,8 +32,40 @@ const CustomizerPage = () => {
     } else if (activeEditorTab === 'filepicker') {
       return <FilePicker file={file!} setFile={setFile} readFile={readFile} />;
     } else if (activeEditorTab === 'aipicker') {
-      return <AIPicker />;
+      return (
+        <AIPicker
+          AIPromt={AIPromt}
+          setAIPromt={setAIPromt}
+          generateImage={generateImage}
+          handleSubmit={handleSubmit}
+        />
+      );
     } else return null;
+  };
+
+  const handleSubmit = async (type: 'logo' | 'fullTexture') => {
+    if (!AIPromt) return alert('Please enter promt');
+    try {
+      setGenerateImage(true);
+
+      const response = await fetch('http://localhost:3000', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          AIPromt,
+        }),
+      });
+      const data = await response.json();
+
+      handleDecals(type, `data:image/png;base64,${data.photo}`);
+    } catch (error) {
+      alert(error);
+    } finally {
+      setGenerateImage(false);
+      setActiveEditorTab('');
+    }
   };
 
   const handleDecals = (type: string, result: string) => {
@@ -91,7 +121,13 @@ const CustomizerPage = () => {
                   <TabPicker
                     key={tab.name}
                     tab={tab}
-                    handleClick={() => setActiveEditorTab(tab.name)}
+                    handleClick={() => {
+                      if (activeEditorTab === '') {
+                        setActiveEditorTab(tab.name);
+                      } else {
+                        setActiveEditorTab('');
+                      }
+                    }}
                   />
                 ))}
                 {showTabContent()}
@@ -104,7 +140,7 @@ const CustomizerPage = () => {
           >
             <button
               onClick={() => (state.intro = true)}
-              className='w-fit px-4 py-2.5 text-[#fff] bg-[#EFBD48] rounded-md'
+              className='w-fit px-4 py-2.5 text-[#fff] bg-[#FE0150] rounded-md'
             >
               Go Back
             </button>

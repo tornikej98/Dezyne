@@ -1,4 +1,5 @@
 import { proxy } from 'valtio';
+import { dezyne, tigerStripes } from '../assets';
 
 interface State {
   intro: boolean;
@@ -12,11 +13,11 @@ interface State {
 
 const state: State = proxy({
   intro: true,
-  color: '#EFBD48',
+  color: '#9e9e9e',
   isLogoTexture: true,
   isFullTexture: false,
-  logoDecal: './threejs.png',
-  fullDecal: './threejs.png',
+  logoDecal: dezyne,
+  fullDecal: tigerStripes,
 });
 
 export default state;
