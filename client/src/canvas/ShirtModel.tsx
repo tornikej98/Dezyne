@@ -2,18 +2,43 @@ import { easing } from 'maath';
 import { useSnapshot } from 'valtio';
 import { useFrame } from '@react-three/fiber';
 import { Decal, useGLTF, useTexture } from '@react-three/drei';
-
 import state from '../store';
+import { Texture } from 'three';
+
+interface ShirtGLTF {
+  nodes: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    T_Shirt_male: any;
+  };
+  materials: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    lambert1: any;
+  };
+}
+
+interface SnapState {
+  color: string;
+  logoDecal: string;
+  fullDecal: string;
+  isFullTexture: boolean;
+  isLogoTexture: boolean;
+  intro: boolean;
+}
 
 const ShirtModel = () => {
-  const snap = useSnapshot(state);
-  const { nodes, materials } = useGLTF('./shirt_baked.glb');
-  const logoTexture = useTexture(snap.logoDecal);
-  const fullTexture = useTexture(snap.fullDecal);
+  const snap = useSnapshot<SnapState>(state);
 
-  useFrame((state, delta) =>
+  const { nodes, materials } = useGLTF(
+    './shirt_baked.glb'
+  ) as unknown as ShirtGLTF;
+
+  const logoTexture = useTexture(snap.logoDecal) as Texture;
+  const fullTexture = useTexture(snap.fullDecal) as Texture;
+
+  useFrame((_, delta) =>
     easing.dampC(materials.lambert1.color, snap.color, 0.25, delta)
   );
+
   return (
     <group>
       <mesh

@@ -1,4 +1,18 @@
-const AIPicker = ({ AIPromt, setAIPromt, generateImage, handleSubmit }) => {
+import React from 'react';
+
+interface AIPickerProps {
+  AIPromt: string;
+  setAIPromt: React.Dispatch<React.SetStateAction<string>>;
+  generateImage: boolean;
+  handleSubmit: (type: 'logo' | 'full') => void;
+}
+
+const AIPicker: React.FC<AIPickerProps> = ({
+  AIPromt,
+  setAIPromt,
+  generateImage,
+  handleSubmit,
+}) => {
   return (
     <div className='aipicker-container'>
       <textarea

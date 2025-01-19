@@ -43,7 +43,7 @@ const CustomizerPage = () => {
     } else return null;
   };
 
-  const handleSubmit = async (type: 'logo' | 'fullTexture') => {
+  const handleSubmit = async (type: 'logo' | 'full') => {
     if (!AIPromt) return alert('Please enter promt');
     try {
       setGenerateImage(true);

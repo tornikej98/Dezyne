@@ -5,8 +5,13 @@ import { useSnapshot } from 'valtio';
 
 import state from '../store';
 import { Euler, Group } from 'three';
+import { ReactNode } from 'react';
 
-const Camera = ({ children }) => {
+interface CameraProps {
+  children: ReactNode;
+}
+
+const Camera: React.FC<CameraProps> = ({ children }) => {
   const group = useRef<Group | null>(null);
   const snap = useSnapshot(state);
 
